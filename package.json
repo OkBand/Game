@@ -1,0 +1,32 @@
+{
+  "name": "rs-final-game",
+  "version": "1.0.0",
+  "description": "The final project at the Stage 2 at The Rolling Scopes School",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "budo src/main.js:build.js --live -- -t [ babelify --presets [ env ] ]"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OkBand/Game.git"
+  },
+  "author": "OkBand\u001b[D\u001b[D\u001b[D\u001b[Dsana Bandura",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OkBand/Game/issues"
+  },
+  "homepage": "https://github.com/OkBand/Game#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^8.0.0",
+    "budo": "^11.2.2"
+  },
+  "dependencies": {
+    "mathjs": "^4.4.2"
+  }
+}
