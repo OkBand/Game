@@ -78,3 +78,33 @@ requestAnimationFrame(loopy);
 
 }
 requestAnimationFrame(loopy); // Start things running!
+
+
+
+
+function doWin() {
+  const winMessage = new Text("You won!", {
+    font: "30pt sans-serif",
+    fill: "black",
+    align: "center"
+  });
+  winMessage.pos.x = 120;
+  winMessage.pos.y = 120;
+  this.add(winMessage);
+  monster.texture = textures.monsterDefeated;
+  taskWindow.classList.add("hidden");
+}
+
+function doGameOver() {
+  const gameOverMessage = new Text("Game Over", {
+    font: "30pt sans-serif",
+    fill: "black",
+    align: "center"
+  });
+  gameOverMessage.pos.x = 120;
+  gameOverMessage.pos.y = 120;
+  this.add(gameOverMessage);
+  player.texture = textures.playerDefeated;
+  taskWindow.classList.add("hidden");
+  gameOver = true;
+}

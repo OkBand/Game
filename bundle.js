@@ -57,6 +57,72 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _container = require("./container.js");
+
+var _container2 = _interopRequireDefault(_container);
+
+var _CanvasRenderer = require("./renderer/CanvasRenderer.js");
+
+var _CanvasRenderer2 = _interopRequireDefault(_CanvasRenderer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var STEP = 1 / 60;
+var MAX_FRAME = STEP * 5;
+
+var Game = function () {
+  function Game(w, h) {
+    var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".main-board";
+
+    _classCallCheck(this, Game);
+
+    this.w = w;
+    this.h = h;
+    this.renderer = new _CanvasRenderer2.default(w, h);
+    document.querySelector(parent).appendChild(this.renderer.view);
+    this.scene = new _container2.default();
+  }
+
+  _createClass(Game, [{
+    key: "run",
+    value: function run() {
+      var _this = this;
+
+      var gameUpdate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+
+      var dt = 0;
+      var last = 0;
+      var loopy = function loopy(ms) {
+        requestAnimationFrame(loopy);
+
+        var t = ms / 1000;
+        dt = Math.min(t - last, MAX_FRAME);
+        last = t;
+
+        _this.scene.update(dt, t);
+        gameUpdate(dt, t);
+        _this.renderer.render(_this.scene);
+      };
+      requestAnimationFrame(loopy);
+    }
+  }]);
+
+  return Game;
+}();
+
+exports.default = Game;
+
+},{"./container.js":8,"./renderer/CanvasRenderer.js":12}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MathTask = function MathTask() {
@@ -90,7 +156,7 @@ var MathTask = function MathTask() {
 
 exports.default = MathTask;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -108,7 +174,7 @@ var Sprite = function Sprite(texture) {
 
 exports.default = Sprite;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -126,7 +192,7 @@ var Task = function Task(text, answer) {
 
 exports.default = Task;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -148,7 +214,7 @@ var Text = function Text() {
 
 exports.default = Text;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -166,7 +232,59 @@ var Texture = function Texture(url) {
 
 exports.default = Texture;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Container = function () {
+  function Container() {
+    _classCallCheck(this, Container);
+
+    this.pos = { x: 0, y: 0 };
+    this.children = [];
+  }
+
+  _createClass(Container, [{
+    key: "add",
+    value: function add(child) {
+      this.children.push(child);
+      return child;
+    }
+  }, {
+    key: "remove",
+    value: function remove(child) {
+      this.children = this.children.filter(function (c) {
+        return c !== child;
+      });
+      return child;
+    }
+  }, {
+    key: "update",
+    value: function update(dt, t) {
+      var _this = this;
+
+      this.children = this.children.filter(function (child) {
+        if (child.update) {
+          child.update(dt, t, _this);
+        }
+        return child.dead ? false : true;
+      });
+    }
+  }]);
+
+  return Container;
+}();
+
+exports.default = Container;
+
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -232,7 +350,7 @@ var KeyControls = function () {
 
 exports.default = KeyControls;
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -311,7 +429,7 @@ var MouseControls = function () {
 
 exports.default = MouseControls;
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -325,6 +443,10 @@ var _Container2 = _interopRequireDefault(_Container);
 var _CanvasRenderer = require("./renderer/CanvasRenderer.js");
 
 var _CanvasRenderer2 = _interopRequireDefault(_CanvasRenderer);
+
+var _Game = require("./Game.js");
+
+var _Game2 = _interopRequireDefault(_Game);
 
 var _Text = require("./Text.js");
 
@@ -359,6 +481,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   Container: _Container2.default,
   CanvasRenderer: _CanvasRenderer2.default,
+  Game: _Game2.default,
   KeyControls: _KeyControls2.default,
   MouseControls: _MouseControls2.default,
   Text: _Text2.default,
@@ -366,9 +489,9 @@ exports.default = {
   MathTask: _MathTask2.default,
   Sprite: _Sprite2.default,
   Texture: _Texture2.default
-}; //import Game from "./Game.js";
+};
 
-},{"./Container.js":1,"./MathTask.js":2,"./Sprite.js":3,"./Task.js":4,"./Text.js":5,"./Texture.js":6,"./controls/KeyControls.js":7,"./controls/MouseControls.js":8,"./renderer/CanvasRenderer.js":10}],10:[function(require,module,exports){
+},{"./Container.js":1,"./Game.js":2,"./MathTask.js":3,"./Sprite.js":4,"./Task.js":5,"./Text.js":6,"./Texture.js":7,"./controls/KeyControls.js":9,"./controls/MouseControls.js":10,"./renderer/CanvasRenderer.js":12}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -451,17 +574,22 @@ var CanvasRenderer = function () {
 
 exports.default = CanvasRenderer;
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 var _index = require("../lib/index.js");
 
 var _index2 = _interopRequireDefault(_index);
 
+var _GameScreen = require("./screens/GameScreen.js");
+
+var _GameScreen2 = _interopRequireDefault(_GameScreen);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Container = _index2.default.Container,
     CanvasRenderer = _index2.default.CanvasRenderer,
+    Game = _index2.default.Game,
     Text = _index2.default.Text,
     Sprite = _index2.default.Sprite,
     Texture = _index2.default.Texture,
@@ -470,146 +598,205 @@ var Container = _index2.default.Container,
     Task = _index2.default.Task,
     MathTask = _index2.default.MathTask;
 
+
 // Game setup code
+var game = new Game(640, 480);
+var scene = game.scene,
+    w = game.w,
+    h = game.h;
 
-var w = 640;
-var h = 480;
-var renderer = new CanvasRenderer(w, h);
-document.querySelector(".main-board").appendChild(renderer.view);
 
-// Load game textures
-var textures = {
-  background: new Texture("res/img/bg.jpg"),
-  player: new Texture("res/img/player_stand.png"),
-  monster: new Texture("res/img/zombie_stand.png"),
-  playerDefeated: new Texture("res/img/player_hurt.png"),
-  monsterDefeated: new Texture("res/img/zombie_hurt.png")
-};
+game.scene = new _GameScreen2.default(game);
+game.run();
 
-// Game objects
-var scene = new Container();
-var controls = new KeyControls();
-var mouse = new MouseControls();
-var modal = document.querySelector(".modal");
+},{"../lib/index.js":11,"./screens/GameScreen.js":14}],14:[function(require,module,exports){
+"use strict";
 
-// Game state variables
-var healthAmount = 100;
-var monsterHealthAmount = 100;
-var taskTextField = document.querySelector(".task");
-
-var mathTask = new MathTask();
-var newTask = new Task(mathTask.text, mathTask.result);
-taskTextField.innerHTML = newTask.text;
-
-var gameOver = false;
-
-//Player
-var player = new Sprite(textures.player);
-player.update = function (dt) {
-  var pos = this.pos;
-
-  player.pos.x = 2 / 10 * w;
-  player.pos.y = 2 / 3 * h;
-};
-
-//Monster
-var monster = new Sprite(textures.monster);
-monster.update = function (dt) {
-  monster.pos.x = 7 / 10 * w;
-  monster.pos.y = 2 / 3 * h;
-};
-
-// Add the health game object
-var health = new Text("Health:", {
-  font: "20px sans-serif",
-  fill: "black",
-  align: "left"
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-health.pos.x = 15;
-health.pos.y = 15;
 
-// Add the monster health game object
-var monsterHealth = new Text("Health:", {
-  font: "20px sans-serif",
-  fill: "black",
-  align: "right"
-});
-monsterHealth.pos.x = 630;
-monsterHealth.pos.y = 15;
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-// Add everything to the scene container
-scene.add(new Sprite(textures.background));
-scene.add(player);
-scene.add(monster);
-scene.add(health);
-scene.add(monsterHealth);
+var _index = require("../../lib/index.js");
 
-// Main game loop
-var dt = 0;
-var last = 0;
+var _index2 = _interopRequireDefault(_index);
 
-function loopy(ms) {
-  requestAnimationFrame(loopy);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-  var t = ms / 1000;
-  dt = t - last;
-  last = t;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  // Game logic code
-  health.text = "Health: " + healthAmount;
-  monsterHealth.text = "Health: " + monsterHealthAmount;
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-  //Check for win
-  if (monsterHealthAmount < 1) {
-    monster.texture = textures.monsterDefeated;
-  }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-  // Check for game over
-  if (healthAmount < 1) {
-    player.texture = textures.playerDefeated;
-  }
+var Container = _index2.default.Container,
+    CanvasRenderer = _index2.default.CanvasRenderer,
+    Game = _index2.default.Game,
+    Text = _index2.default.Text,
+    Sprite = _index2.default.Sprite,
+    Texture = _index2.default.Texture,
+    KeyControls = _index2.default.KeyControls,
+    MouseControls = _index2.default.MouseControls,
+    Task = _index2.default.Task,
+    MathTask = _index2.default.MathTask;
 
-  // Update everything
-  scene.update(dt, t);
-  // Render everything
-  renderer.render(scene);
-}
+var GameScreen = function (_Container) {
+  _inherits(GameScreen, _Container);
 
-requestAnimationFrame(loopy);
+  function GameScreen(game) {
+    _classCallCheck(this, GameScreen);
 
-modal.classList.remove("hidden");
+    // Load game textures
+    var _this = _possibleConstructorReturn(this, (GameScreen.__proto__ || Object.getPrototypeOf(GameScreen)).call(this));
 
-var answerField = document.querySelector(".answer");
-var submit = document.querySelector(".submit-answer");
-var answer = void 0;
+    var textures = {
+      background: new Texture("res/img/bg.jpg"),
+      player: new Texture("res/img/player_stand.png"),
+      monster: new Texture("res/img/zombie_stand.png"),
+      playerDefeated: new Texture("res/img/player_hurt.png"),
+      monsterDefeated: new Texture("res/img/zombie_hurt.png")
+    };
 
-submit.addEventListener("submit", function () {
-  localStorage.setItem("answer", answerField.value);
-  var answer = localStorage.getItem("answer");
-  if (answer == newTask.answer) {
-    monsterHealthAmount -= 20;
-  } else {
-    healthAmount -= 20;
-  }
-  localStorage.removeItem("answer");
-  if (!monster.dead) {
-    mathTask = new MathTask();
-    newTask = new Task(mathTask.text, mathTask.result);
+    // Game objects
+    var controls = new KeyControls();
+    var mouse = new MouseControls();
+    var modal = document.querySelector(".modal");
+    var taskWindow = document.querySelector(".task-window");
+
+    // Game state variables
+    var healthAmount = 100;
+    var monsterHealthAmount = 100;
+    var taskTextField = document.querySelector(".task");
+
+    var mathTask = new MathTask();
+    var newTask = new Task(mathTask.text, mathTask.result);
     taskTextField.innerHTML = newTask.text;
+
+    var gameOver = false;
+
+    //Player
+    var player = new Sprite(textures.player);
+    player.update = function (dt) {
+      var pos = this.pos;
+
+      player.pos.x = 2 / 10 * w;
+      player.pos.y = 2 / 3 * h;
+    };
+
+    //Monster
+    var monster = new Sprite(textures.monster);
+    monster.update = function (dt) {
+      monster.pos.x = 7 / 10 * w;
+      monster.pos.y = 2 / 3 * h;
+    };
+
+    // Add the health game object
+    _this.health = new Text("Health:", {
+      font: "20px sans-serif",
+      fill: "black",
+      align: "left"
+    });
+    health.pos.x = 15;
+    health.pos.y = 15;
+
+    // Add the monster health game object
+    _this.monsterHealth = new Text("Health:", {
+      font: "20px sans-serif",
+      fill: "black",
+      align: "right"
+    });
+    monsterHealth.pos.x = 630;
+    monsterHealth.pos.y = 15;
+
+    // Add everything to the scene container
+    _this.add(new Sprite(textures.background));
+    _this.add(player);
+    _this.add(monster);
+    _this.add(health);
+    _this.add(monsterHealth);
+
+    modal.classList.remove("hidden");
+    var answerField = document.querySelector(".answer");
+    var choose = document.querySelector(".choose-spell");
+    var submit = document.querySelector(".submit-answer");
+    var answer = void 0;
+
+    choose.addEventListener("submit", function () {
+      event.preventDefault();
+      taskWindow.classList.remove("hidden");
+      modal.classList.add("hidden");
+    });
+
+    submit.addEventListener("submit", function () {
+      event.preventDefault();
+      localStorage.setItem("answer", answerField.value);
+      var answer = localStorage.getItem("answer");
+      if (answer == newTask.answer) {
+        monsterHealthAmount -= 20;
+      } else {
+        healthAmount -= 20;
+      }
+      localStorage.removeItem("answer");
+      answerField.value = "";
+      if (!monster.dead) {
+        mathTask = new MathTask();
+        newTask = new Task(mathTask.text, mathTask.result);
+        taskTextField.innerHTML = newTask.text;
+      }
+    });
+
+    function doWin() {
+      var winMessage = new Text("You won!", {
+        font: "30pt sans-serif",
+        fill: "black",
+        align: "center"
+      });
+      winMessage.pos.x = w / 2;
+      winMessage.pos.y = 120;
+      this.add(winMessage);
+      monster.texture = textures.monsterDefeated;
+      taskWindow.classList.add("hidden");
+    }
+
+    function doGameOver() {
+      var gameOverMessage = new Text("Game Over", {
+        font: "30pt sans-serif",
+        fill: "black",
+        align: "center"
+      });
+      gameOverMessage.pos.x = w / 2;
+      gameOverMessage.pos.y = 120;
+      this.add(gameOverMessage);
+      player.texture = textures.playerDefeated;
+      taskWindow.classList.add("hidden");
+      gameOver = true;
+    }
+
+    return _this;
   }
-});
 
-function doGameOver() {
-  var gameOverMessage = new Text("Game Over", {
-    font: "30pt sans-serif",
-    fill: "black",
-    align: "center"
-  });
-  gameOverMessage.pos.x = w / 2;
-  gameOverMessage.pos.y = 120;
-  scene.add(gameOverMessage);
-  scene.remove(player);
-  gameOver = true;
-}
+  _createClass(GameScreen, [{
+    key: "update",
+    value: function update(dt, t) {
+      this.health.text = "Health: " + healthAmount;
+      this.monsterHealth.text = "Health: " + monsterHealthAmount;
 
-},{"../lib/index.js":9}]},{},[11]);
+      //Check for win
+      if (monsterHealthAmount < 1) {
+        doWin();
+      }
+
+      // Check for game over
+      if (healthAmount < 1) {
+        doGameOver();
+      }
+    }
+  }]);
+
+  return GameScreen;
+}(Container);
+
+exports.default = GameScreen;
+
+},{"../../lib/index.js":11}]},{},[13]);
