@@ -7,6 +7,5 @@ import GameScreen from "./screens/GameScreen.js";
 const game = new Game(640, 480);
 const { scene, w, h } = game;
 
-game.scene = new GameScreen(game, controls, gameOverScreen);
+game.scene = new GameScreen(game);
 game.run();
-}

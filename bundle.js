@@ -606,7 +606,7 @@ var scene = game.scene,
     h = game.h;
 
 
-game.scene = new _GameScreen2.default(game);
+game.scene = new _GameScreen2.default(game, controls, gameOverScreen);
 game.run();
 
 },{"../lib/index.js":11,"./screens/GameScreen.js":14}],14:[function(require,module,exports){
@@ -632,82 +632,118 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var Container = _index2.default.Container,
     CanvasRenderer = _index2.default.CanvasRenderer,
-    Game = _index2.default.Game,
     Text = _index2.default.Text,
     Sprite = _index2.default.Sprite,
     Texture = _index2.default.Texture,
-    KeyControls = _index2.default.KeyControls,
-    MouseControls = _index2.default.MouseControls,
     Task = _index2.default.Task,
     MathTask = _index2.default.MathTask;
+
+
+var textures = {
+  background: new Texture("res/img/bg.jpg"),
+  player: new Texture("res/img/player_stand.png"),
+  monster: new Texture("res/img/zombie_stand.png"),
+  playerDefeated: new Texture("res/img/player_hurt.png"),
+  monsterDefeated: new Texture("res/img/zombie_hurt.png")
+};
+
+// Game objects
+var modal = document.querySelector(".modal");
+var taskWindow = document.querySelector(".task-window");
+
+// Game state variables
+var healthAmount = 100;
+var monsterHealthAmount = 100;
+
+//Task handling
+var taskTextField = document.querySelector(".task");
+var mathTask = new MathTask();
+var newTask = new Task(mathTask.text, mathTask.result);
+taskTextField.innerHTML = newTask.text;
+
+//Game state
+//let win = false;
+//let gameOver = false;
+
+
+//Player
+var player = new Sprite(textures.player);
+
+//Monster
+var monster = new Sprite(textures.monster);
+
+// Add the health game object
+var health = new Text("Health:", {
+  font: "20px sans-serif",
+  fill: "black",
+  align: "left"
+});
+
+// Add the monster health game object
+var monsterHealth = new Text("Health:", {
+  font: "20px sans-serif",
+  fill: "black",
+  align: "right"
+});
+
+modal.classList.remove("hidden");
+var answerField = document.querySelector(".answer");
+var choose = document.querySelector(".choose-spell");
+var submit = document.querySelector(".submit-answer");
+var answer = void 0;
+
+choose.addEventListener("submit", function () {
+  event.preventDefault();
+  taskWindow.classList.remove("hidden");
+  modal.classList.add("hidden");
+});
+
+submit.addEventListener("submit", function () {
+  event.preventDefault();
+  localStorage.setItem("answer", answerField.value);
+  var answer = localStorage.getItem("answer");
+  if (answer == newTask.answer) {
+    monsterHealthAmount -= 20;
+  } else {
+    healthAmount -= 20;
+  }
+  localStorage.removeItem("answer");
+  answerField.value = "";
+  if (!monster.dead) {
+    mathTask = new MathTask();
+    newTask = new Task(mathTask.text, mathTask.result);
+    taskTextField.innerHTML = newTask.text;
+  }
+});
+
+var message = new Text(" ", {
+  font: "30pt sans-serif",
+  fill: "black",
+  align: "center"
+});
 
 var GameScreen = function (_Container) {
   _inherits(GameScreen, _Container);
 
-  function GameScreen(game) {
+  function GameScreen(game, w, h) {
     _classCallCheck(this, GameScreen);
 
-    // Load game textures
     var _this = _possibleConstructorReturn(this, (GameScreen.__proto__ || Object.getPrototypeOf(GameScreen)).call(this));
 
-    var textures = {
-      background: new Texture("res/img/bg.jpg"),
-      player: new Texture("res/img/player_stand.png"),
-      monster: new Texture("res/img/zombie_stand.png"),
-      playerDefeated: new Texture("res/img/player_hurt.png"),
-      monsterDefeated: new Texture("res/img/zombie_hurt.png")
-    };
+    player.pos.x = 100;
+    player.pos.y = 300;
 
-    // Game objects
-    var controls = new KeyControls();
-    var mouse = new MouseControls();
-    var modal = document.querySelector(".modal");
-    var taskWindow = document.querySelector(".task-window");
+    monster.pos.x = 500;
+    monster.pos.y = 300;
 
-    // Game state variables
-    var healthAmount = 100;
-    var monsterHealthAmount = 100;
-    var taskTextField = document.querySelector(".task");
-
-    var mathTask = new MathTask();
-    var newTask = new Task(mathTask.text, mathTask.result);
-    taskTextField.innerHTML = newTask.text;
-
-    var gameOver = false;
-
-    //Player
-    var player = new Sprite(textures.player);
-    player.update = function (dt) {
-      var pos = this.pos;
-
-      player.pos.x = 2 / 10 * w;
-      player.pos.y = 2 / 3 * h;
-    };
-
-    //Monster
-    var monster = new Sprite(textures.monster);
-    monster.update = function (dt) {
-      monster.pos.x = 7 / 10 * w;
-      monster.pos.y = 2 / 3 * h;
-    };
-
-    // Add the health game object
-    _this.health = new Text("Health:", {
-      font: "20px sans-serif",
-      fill: "black",
-      align: "left"
-    });
     health.pos.x = 15;
     health.pos.y = 15;
 
-    // Add the monster health game object
-    _this.monsterHealth = new Text("Health:", {
-      font: "20px sans-serif",
-      fill: "black",
-      align: "right"
-    });
     monsterHealth.pos.x = 630;
     monsterHealth.pos.y = 15;
+
+    message.pos.x = 330;
+    message.pos.y = 220;
 
     // Add everything to the scene container
     _this.add(new Sprite(textures.background));
@@ -715,81 +751,27 @@ var GameScreen = function (_Container) {
     _this.add(monster);
     _this.add(health);
     _this.add(monsterHealth);
-
-    modal.classList.remove("hidden");
-    var answerField = document.querySelector(".answer");
-    var choose = document.querySelector(".choose-spell");
-    var submit = document.querySelector(".submit-answer");
-    var answer = void 0;
-
-    choose.addEventListener("submit", function () {
-      event.preventDefault();
-      taskWindow.classList.remove("hidden");
-      modal.classList.add("hidden");
-    });
-
-    submit.addEventListener("submit", function () {
-      event.preventDefault();
-      localStorage.setItem("answer", answerField.value);
-      var answer = localStorage.getItem("answer");
-      if (answer == newTask.answer) {
-        monsterHealthAmount -= 20;
-      } else {
-        healthAmount -= 20;
-      }
-      localStorage.removeItem("answer");
-      answerField.value = "";
-      if (!monster.dead) {
-        mathTask = new MathTask();
-        newTask = new Task(mathTask.text, mathTask.result);
-        taskTextField.innerHTML = newTask.text;
-      }
-    });
-
-    function doWin() {
-      var winMessage = new Text("You won!", {
-        font: "30pt sans-serif",
-        fill: "black",
-        align: "center"
-      });
-      winMessage.pos.x = w / 2;
-      winMessage.pos.y = 120;
-      this.add(winMessage);
-      monster.texture = textures.monsterDefeated;
-      taskWindow.classList.add("hidden");
-    }
-
-    function doGameOver() {
-      var gameOverMessage = new Text("Game Over", {
-        font: "30pt sans-serif",
-        fill: "black",
-        align: "center"
-      });
-      gameOverMessage.pos.x = w / 2;
-      gameOverMessage.pos.y = 120;
-      this.add(gameOverMessage);
-      player.texture = textures.playerDefeated;
-      taskWindow.classList.add("hidden");
-      gameOver = true;
-    }
-
+    _this.add(message);
     return _this;
   }
 
   _createClass(GameScreen, [{
     key: "update",
     value: function update(dt, t) {
-      this.health.text = "Health: " + healthAmount;
-      this.monsterHealth.text = "Health: " + monsterHealthAmount;
+      health.text = "Health: " + healthAmount;
+      monsterHealth.text = "Health: " + monsterHealthAmount;
 
       //Check for win
       if (monsterHealthAmount < 1) {
-        doWin();
+        monster.texture = textures.monsterDefeated;
+        taskWindow.classList.add("hidden");
+        message.text = "You won!";
       }
-
       // Check for game over
       if (healthAmount < 1) {
-        doGameOver();
+        player.texture = textures.playerDefeated;
+        taskWindow.classList.add("hidden");
+        message.text = "Game over";
       }
     }
   }]);
