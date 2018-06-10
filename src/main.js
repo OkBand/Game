@@ -1,11 +1,9 @@
 import lib from "../lib/index.js";
-const { Game, Container, CanvasRenderer, Text, Sprite, Texture, KeyControls, MouseControls } = lib;
-const math = require("mathjs");
+const { Container, CanvasRenderer, Text, Sprite, Texture, KeyControls, MouseControls, Task, MathTask } = lib;
 
 // Game setup code
-const game = new Game(640, 320);
-const { scene, w, h } = game;
-
+const w = 640;
+const h = 480;
 const renderer = new CanvasRenderer(w, h);
 document.querySelector(".main-board").appendChild(renderer.view);
 
@@ -13,29 +11,44 @@ document.querySelector(".main-board").appendChild(renderer.view);
 const textures = {
   background: new Texture("res/img/bg.jpg"),
   player: new Texture("res/img/player_stand.png"),
-  monster: new Texture("res/img/zombie_stand.png")
+  monster: new Texture("res/img/zombie_stand.png"),
+  playerDefeated: new Texture("res/img/player_hurt.png"),
+  monsterDefeated: new Texture("res/img/zombie_hurt.png")
 };
 
 // Game objects
-
+const scene = new Container();
 const controls = new KeyControls();
 const mouse = new MouseControls();
+const modal = document.querySelector(".modal");
+const taskWindow = document.querySelector(".task-window");
 
 // Game state variables
 let healthAmount = 100;
 let monsterHealthAmount = 100;
+let taskTextField = document.querySelector(".task");
+
+let mathTask = new MathTask();
+let newTask = new Task(mathTask.text, mathTask.result);
+taskTextField.innerHTML = newTask.text;
+
 let gameOver = false;
+
 
 //Player
 const player = new Sprite(textures.player);
-player.pos.x = 2/10 * w;
-player.pos.y = 2/3 * h;
+player.update = function(dt) {
+  const { pos } = this;
+  player.pos.x = 2/10 * w;
+  player.pos.y = 2/3 * h;
+};
 
 //Monster
 const monster = new Sprite(textures.monster);
-monster.pos.x = 7/10 * w;
-monster.pos.y = 2/3 * h;
-
+monster.update = function(dt) {
+  monster.pos.x = 7/10 * w;
+  monster.pos.y = 2/3 * h;
+};
 
 // Add the health game object
 const health = new Text("Health:", {
@@ -79,35 +92,68 @@ function loopy(ms) {
   health.text = "Health: " + healthAmount;
   monsterHealth.text = "Health: " + monsterHealthAmount;
 
+  //Check for win
+  if (monsterHealthAmount < 1) {
+    doWin();
+  }
 
-
+  // Check for game over
+  if (healthAmount < 1) {
+    doGameOver();
+  }
 
   // Update everything
   scene.update(dt, t);
-
   // Render everything
   renderer.render(scene);
 }
+
 requestAnimationFrame(loopy);
 
-const modal = document.querySelector(".modal");
 modal.classList.remove("hidden");
-let task = document.querySelector(".task").innerHTML;
+
+
 let answerField = document.querySelector(".answer");
+let choose = document.querySelector(".choose-spell");
 let submit = document.querySelector(".submit-answer");
 let answer;
 
-submit.addEventListener("click", function() {
+choose.addEventListener("submit", function() {
+  event.preventDefault();
+  taskWindow.classList.remove("hidden");
+  modal.classList.add("hidden");
+});
+
+submit.addEventListener("submit", function() {
+  event.preventDefault();
   localStorage.setItem("answer", answerField.value);
   let answer = localStorage.getItem("answer");
-  if (answer == math.eval(task)) {
+  if (answer == newTask.answer) {
     monsterHealthAmount -=  20;
   }
   else {
     healthAmount -=  20;
   }
   localStorage.removeItem("answer");
+  if (!monster.dead) {
+    mathTask = new MathTask();
+    newTask = new Task(mathTask.text, mathTask.result);
+    taskTextField.innerHTML = newTask.text;
+  }
 });
+
+function doWin() {
+  const winMessage = new Text("You won!", {
+    font: "30pt sans-serif",
+    fill: "black",
+    align: "center"
+  });
+  winMessage.pos.x = w / 2;
+  winMessage.pos.y = 120;
+  scene.add(winMessage);
+  monster.texture = textures.monsterDefeated;
+  taskWindow.classList.add("hidden");
+}
 
 function doGameOver() {
   const gameOverMessage = new Text("Game Over", {
@@ -118,14 +164,7 @@ function doGameOver() {
   gameOverMessage.pos.x = w / 2;
   gameOverMessage.pos.y = 120;
   scene.add(gameOverMessage);
-  scene.remove(player);
+  player.texture = textures.playerDefeated;
+  taskWindow.classList.add("hidden");
   gameOver = true;
-}
-
-// Check for game over
-if (health < 1) {
-  if (!gameOver) {
-    doGameOver();
-  }
-  player.dead = true;
 }

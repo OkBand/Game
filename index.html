@@ -3,16 +3,29 @@
   <head>
     <meta charset="utf-8">
     <title>Game</title>
-    <link rel="stylesheet" href="res/main.css">
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
     <div class="main-board" id="board">
     </div>
     <div class="modal hidden">
-      <label for="answer-field" class="task">2 + 2</label>
-      <input type="text" class="answer" id="answer-field">
-      <button class="submit-answer">Answer</button>
+      <form class="choose-spell" method="get">
+        <input type="radio" class="spell1" name="spell" id="spell-field1" checked>
+        <label for="spell-field1">Attack 1</label>
+        <input type="radio" class="spell2" name="spell" id="spell-field2">
+        <label for="spell-field2">Attack 2</label>
+        <input type="radio" class="spell3" name="spell" id="spell-field3">
+        <label for="spell-field3">Heal</label>
+        <button class="spell-button" type="submit">Choose</button>
+      </form>
     </div>
-    <script type="module" src="build.js"></script>
+    <div class="task-window hidden">
+      <form class="submit-answer" method="get">
+        <label for="answer-field" class="task"></label>
+        <input type="text" class="answer" id="answer-field" autocomplete="off">
+        <button class="submit-button" type="submit">Answer</button>
+      </form>
+    </div>
+    <script src="build.js"></script>
   </body>
 </html>

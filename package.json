@@ -2,13 +2,15 @@
   "name": "rs-final-game",
   "version": "1.0.0",
   "description": "The final project at the Stage 2 at The Rolling Scopes School",
-  "main": "index.js",
+  "main": "src/main.js",
+  "style": "res/main.css",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "budo src/main.js:build.js --live -- -t [ babelify --presets [ env ] ]"
+    "start": "budo src/main.js:build.js --live -- -t [ babelify --presets [ env ] ]",
+    "build": "browserify src/main.js -o bundle.js -t [ babelify --presets [ env ] ]"
   },
   "repository": {
     "type": "git",
@@ -24,9 +26,7 @@
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "babelify": "^8.0.0",
+    "browserify": "^15.2.0",
     "budo": "^11.2.2"
-  },
-  "dependencies": {
-    "mathjs": "^4.4.2"
   }
 }
