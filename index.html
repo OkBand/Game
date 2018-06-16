@@ -6,26 +6,24 @@
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <div class="main-board">
+    <div class="container">
+      <h1>Brain Warrior v.1.0</h1>
+      <section class="about">
+        <div class="column">
+          <h2>Screenshots</h2>
+          <figure>
+            <img src="res/img/screenshot1.png" width="320" height="240" alt="Brain Warrior screenshot">
+          </figure>
+        </div>
+        <div class="column">
+          <h2>Rules</h2>
+          <p>Choose spells, solve puzzles, win!</p>
+          <a href="game.html" class="start-game">Start the game</a>
+          <h2 class="about-author">Author</h2>
+          <p>Game by Oksana Bandura</p>
+          <p>GitHub: <a href="https://github.com/OkBand">OkBand</a></p>
+        </div>
+      </section>
     </div>
-    <div class="modal hidden">
-      <form class="choose-spell" method="get">
-        <input type="radio" class="spell1" name="spell" id="spell-field1" checked>
-        <label for="spell-field1">Attack 1</label>
-        <input type="radio" class="spell2" name="spell" id="spell-field2">
-        <label for="spell-field2">Attack 2</label>
-        <input type="radio" class="spell3" name="spell" id="spell-field3">
-        <label for="spell-field3">Heal</label>
-        <button class="spell-button" type="submit">Choose</button>
-      </form>
-    </div>
-    <div class="task-window hidden">
-      <form class="submit-answer" method="get">
-        <label for="answer-field" class="task"></label>
-        <input type="text" class="answer" id="answer-field" autocomplete="off">
-        <button class="submit-button" type="submit">Answer</button>
-      </form>
-    </div>
-    <script src="build.js"></script>
   </body>
 </html>

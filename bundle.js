@@ -606,7 +606,7 @@ var scene = game.scene,
     h = game.h;
 
 
-game.scene = new _GameScreen2.default(game, controls, gameOverScreen);
+game.scene = new _GameScreen2.default(game);
 game.run();
 
 },{"../lib/index.js":11,"./screens/GameScreen.js":14}],14:[function(require,module,exports){

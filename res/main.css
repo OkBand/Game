@@ -1,3 +1,20 @@
+html, body {
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+.container {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: gray;
+}
+
+h1 {
+  width: 300px;
+  margin: 0 auto;
+}
+
 .main-board {
   width: 640px;
   height: 480px;

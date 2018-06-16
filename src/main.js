@@ -1,5 +1,5 @@
 import lib from "../lib/index.js";
-const { Container, CanvasRenderer, Game, Text, Sprite, Texture, KeyControls, MouseControls, Task, MathTask } = lib;
+const { Container, CanvasRenderer, Game, Text, Sprite, TileSprite, Texture, Task, MathTask } = lib;
 
 import GameScreen from "./screens/GameScreen.js";
 

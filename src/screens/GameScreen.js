@@ -77,6 +77,8 @@ submit.addEventListener("submit", function() {
     mathTask = new MathTask();
     newTask = new Task(mathTask.text, mathTask.result);
     taskTextField.innerHTML = newTask.text;
+    taskWindow.classList.add("hidden");
+    modal.classList.remove("hidden");
   }
 });
 
@@ -123,12 +125,14 @@ class GameScreen extends Container {
     if (monsterHealthAmount < 1) {
       monster.texture = textures.monsterDefeated;
       taskWindow.classList.add("hidden");
+      modal.classList.add("hidden");
       message.text = "You won!"
     }
     // Check for game over
     if (healthAmount < 1) {
       player.texture = textures.playerDefeated;
       taskWindow.classList.add("hidden");
+      modal.classList.add("hidden");
       message.text = "Game over"
     }
   }
