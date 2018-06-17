@@ -11,7 +11,7 @@ html, body {
   min-height: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background: grey;
+  background: #C9C49A;
 }
 
 .about {
@@ -60,6 +60,7 @@ a {
 
 .start-game {
   margin-top: 30px;
+  padding: 7px 25px;
 }
 
 .about-page {
@@ -84,6 +85,10 @@ a {
   padding: 5px 20px;
   font-family: "Amatic SC", cursive;
   font-weight: 700;
+}
+
+.credits {
+  list-style: none;
 }
 
 .main-board {

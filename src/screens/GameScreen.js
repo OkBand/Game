@@ -61,10 +61,6 @@ const monsterNamespace = {
   thirdname: "Dima, Valeriy, Vladimir, Joseph, Adolf, Alexander, Piotr, Donald, Victor, Tom, Voldy, Vader, Anakin, Yoda, Kylo"
 }
 
-
-
-
-
 // Add the health game object
 const health = new Text("Health:",
 {
