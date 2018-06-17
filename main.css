@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Amatic+SC:400,700');
+
 html, body {
   margin: 0 auto;
-  font-family: sans-serif;
+  font-family: "Amatic SC", cursive;
+  font-weight: 700;
 }
 
 .container {
@@ -8,7 +11,7 @@ html, body {
   min-height: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background: grey;
+  background: #C9C49A;
 }
 
 .about {
@@ -45,41 +48,51 @@ a {
   width: 180px;
   height: 50px;
   box-sizing: border-box;
-  padding: 15px;
+  padding: 10px;
   border: 1px solid black;
+  border-radius: 5px;
   background: green;
+  font-size: 30px;
   color: black;
-  font-weight: 600;
   text-decoration: none;
   text-transform: uppercase;
 }
 
 .start-game {
   margin-top: 30px;
+  padding: 7px 25px;
 }
 
 .about-page {
   position: absolute;
   top: 20px;
   left: 20px;
-  padding: 15px 60px;
+  padding: 5px 60px;
 }
 
 .start-new-game {
   position: absolute;
   top: 100px;
   left: 20px;
+  padding: 5px 20px;
 }
 
 .records {
   position: absolute;
   top: 170px;
   left: 20px;
-  font-size: 16px;
   outline: 0;
+  padding: 5px 20px;
+  font-family: "Amatic SC", cursive;
+  font-weight: 700;
+}
+
+.credits {
+  list-style: none;
 }
 
 .main-board {
+  position: relative;
   width: 640px;
   height: 480px;
   margin: auto;
@@ -93,6 +106,7 @@ input, button {
 button {
   display: block;
   cursor: pointer;
+  outline: 0;
 }
 
 .modal {
@@ -106,9 +120,15 @@ button {
   margin-top: -200px;
   margin-left: -100px;
   padding: 15px;
-  background: gray;
-  border: 1px solid black;
-  border-radius: 20%;
+  background: #C9C49A;
+  border: 1px solid transparent;
+  border-radius: 70px;
+
+  font-family: "Amatic SC", cursive;
+  font-size: 26px;
+  font-weight: 700;
+  color: #420C14;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .choose-spell {
@@ -118,8 +138,9 @@ button {
   align-items: center;
   width: 100%;
   height: 100%;
-  border: 1px solid black;
-  border-radius: 20%;
+  background: #C9C49A;
+  border: 1px solid transparent;
+  border-radius: 70px;
 }
 
 .modal input[type="radio"] {
@@ -132,35 +153,98 @@ button {
   width: 60px;
   height: 60px;
   margin: 0 auto;
-  padding: 5px 10px;
-  background: white;
-  cursor: pointer;
-  border: 1px solid black;
-  border-radius: 10%;
+  padding: 12px 12px;
 }
 
 .modal input[type="radio"]:checked + label {
-  background: red;
+  background: #732C2C;
+  box-shadow: 2px 2px 2px #2A080D;
 }
 
 .modal button {
+  width: 120px;
+  height: 60px;
   margin: 0 auto;
   margin-top: 20px;
+  outline: 0;
+}
+
+.modal-button {
+  outline: 0;
+  background: #ABA361;
+  border: 1px solid transparent;
+  border-radius: 15px;
+  font-family: "Amatic SC", cursive;
+  font-size: 28px;
+  font-weight: 700;
+  color: #420C14;
+  box-shadow: 2px 2px 2px #8C8650;
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  background: #9C9559;
 }
 
 .task-window {
   position: fixed;
-  top: 50%;
+  top: 0px;
   left: 50%;
   z-index: 5;
 
-  width: 200px;
-  height: 100px;
-  margin-top: -100px;
-  margin-left: -100px;
+  width: 640px;
+  height: 480px;
+  margin-left: -320px;
   padding: 15px;
-  background: white;
-  border: 1px solid black;
+  background: #F4F9E0;
+  border: 3px solid #C4CBAA;
+  border-radius: 10px;
+}
+
+.task-window h2 {
+  width: 220px;
+  margin: 20px auto;
+  font-size: 40px;
+  text-transform: uppercase;
+}
+
+.submit-answer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  padding: 40px;
+}
+
+.submit-answer label {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.submit-answer input {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #9C9559;
+  border-radius: 5px;
+  font-family: "Amatic SC", cursive;
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+}
+
+input:focus {
+  outline: none;
+}
+
+.submit-answer .submit-button {
+  width: 80px;
+  height: 50px;
+  border-radius: 3px;
+  text-transform: uppercase;
 }
 
 .hidden {
