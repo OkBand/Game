@@ -61,37 +61,6 @@ const monsterNamespace = {
   thirdname: "Dima, Valeriy, Vladimir, Joseph, Adolf, Alexander, Piotr, Donald, Victor, Tom, Voldy, Vader, Anakin, Yoda, Kylo"
 }
 
-const monsterNameText = nameTheMonster(monsterNamespace.firstname) + " " + nameTheMonster(monsterNamespace.secondname) + " " + nameTheMonster(monsterNamespace.thirdname);
-
-const monsterName = new Text(monsterNameText,
-{
-  font: "16px sans-serif",
-  fill: "black",
-  align: "left"
-});
-
-function nameTheMonster(str) {
-  let arr = str.split(", ");
-  let index = getRandomInt(arr.length);
-  return arr[index];
-
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-  };
-}
-
-function clearText() {
-  setTimeout(function(){
-    message.text = "";
-    modal.classList.remove("hidden");
-  }, 1000);
-}
-
-//const fire = new TileSprite(fire, 128, 128);
-
-function animateSpell() {
-
-};
 
 
 
@@ -112,43 +81,6 @@ const monsterHealth = new Text("Health:", {
 });
 
 
-modal.classList.remove("hidden");
-let answerField = document.querySelector(".answer");
-let choose = document.querySelector(".choose-spell");
-let submit = document.querySelector(".submit-answer");
-let answer;
-
-choose.addEventListener("submit", function() {
-  event.preventDefault();
-  taskWindow.classList.remove("hidden");
-  modal.classList.add("hidden");
-});
-
-submit.addEventListener("submit", function() {
-  event.preventDefault();
-  localStorage.setItem("answer", answerField.value);
-  taskWindow.classList.add("hidden");
-  animateSpell();
-  let answer = localStorage.getItem("answer");
-  if (answer == newTask.answer) {
-    monsterHealthAmount -=  20;
-    message.text = "Right!";
-    clearText();
-  }
-  else {
-    healthAmount -=  20;
-    message.text = "Wrong!";
-    clearText();
-  }
-  localStorage.removeItem("answer");
-  answerField.value = "";
-  if (!monster.dead) {
-    mathTask = new MathTask();
-    newTask = new Task(mathTask.text, mathTask.result);
-    taskTextField.innerHTML = newTask.text;
-  }
-});
-
 const message = new Text(" ", {
   font: "30pt sans-serif",
   fill: "black",
@@ -159,6 +91,18 @@ const message = new Text(" ", {
 class GameScreen extends Container {
   constructor(game, w, h) {
     super();
+
+
+
+    const monsterNameText = nameTheMonster(monsterNamespace.firstname) + " " + nameTheMonster(monsterNamespace.secondname) + " " + nameTheMonster(monsterNamespace.thirdname);
+
+
+    const monsterName = new Text(monsterNameText,
+    {
+      font: "16px sans-serif",
+      fill: "black",
+      align: "left"
+    });
 
     player.pos.x = 100;
     player.pos.y = 300;
@@ -211,6 +155,7 @@ class GameScreen extends Container {
       weapon: "780, 838, 896, 954"
     }
 
+
     monster.head.frame.x = monsterParts.head.split(", ")[getRandomInt(4)];
     monster.body.frame.x = monsterParts.body.split(", ")[getRandomInt(4)];
     monster.leg1.frame.x = monsterParts.leg.split(", ")[getRandomInt(4)];
@@ -233,6 +178,70 @@ class GameScreen extends Container {
 
     message.pos.x = 330;
     message.pos.y = 220;
+
+    modal.classList.remove("hidden");
+    let answerField = document.querySelector(".answer");
+    let choose = document.querySelector(".choose-spell");
+    let submit = document.querySelector(".submit-answer");
+    let answer;
+
+    choose.addEventListener("submit", function() {
+      event.preventDefault();
+      taskWindow.classList.remove("hidden");
+      modal.classList.add("hidden");
+    });
+
+    submit.addEventListener("submit", function() {
+      event.preventDefault();
+      localStorage.setItem("answer", answerField.value);
+      taskWindow.classList.add("hidden");
+      const fire = new Spell();
+
+      this.remove(fire);
+
+      let answer = localStorage.getItem("answer");
+      if (answer == newTask.answer) {
+        monsterHealthAmount -=  20;
+        message.text = "Right!";
+        clearText();
+      }
+      else {
+        healthAmount -=  20;
+        message.text = "Wrong!";
+        clearText();
+      }
+      localStorage.removeItem("answer");
+      answerField.value = "";
+      if (!monster.dead) {
+        mathTask = new MathTask();
+        newTask = new Task(mathTask.text, mathTask.result);
+        taskTextField.innerHTML = newTask.text;
+      }
+    });
+
+
+    function nameTheMonster(str) {
+      let arr = str.split(", ");
+      let index = getRandomInt(arr.length);
+      return arr[index];
+
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      };
+    }
+
+    function clearText() {
+      setTimeout(function(){
+        message.text = "";
+        modal.classList.remove("hidden");
+      }, 1000);
+    }
+
+    //const fire = new TileSprite(fire, 128, 128);
+
+    function animateSpell() {
+    };
+
 
     // Add everything to the scene container
     this.add(new Sprite(textures.background));

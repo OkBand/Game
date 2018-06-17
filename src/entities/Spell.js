@@ -1,6 +1,6 @@
 import lib from "../../lib/index.js";
 const { TileSprite, Texture } = lib;
-const texture = new Texture("res/img/fire.png");
+const texture = new Texture("res/img/spells/fire.png");
 class Spell extends TileSprite {
   constructor() {
     super(texture, 128, 128);
