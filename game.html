@@ -3,27 +3,28 @@
   <head>
     <meta charset="utf-8">
     <title>Game</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="res/main.css">
   </head>
   <body>
     <div class="main-board">
+      <div class="task-window hidden">
+        <h2>Solve the equation</h2>
+        <form class="submit-answer" method="get">
+          <label for="answer-field" class="task"></label>
+          <input type="text" class="answer" id="answer-field" autocomplete="off">
+          <button class="submit-button modal-button" type="submit">Answer</button>
+        </form>
+      </div>
     </div>
     <div class="modal hidden">
       <form class="choose-spell" method="get">
         <input type="radio" class="spell1" name="spell" id="spell-field1" checked>
-        <label for="spell-field1">Attack 1</label>
+        <label for="spell-field1" class="modal-button">Fire</label>
         <input type="radio" class="spell2" name="spell" id="spell-field2">
-        <label for="spell-field2">Attack 2</label>
+        <label for="spell-field2" class="modal-button">Light</label>
         <input type="radio" class="spell3" name="spell" id="spell-field3">
-        <label for="spell-field3">Heal</label>
-        <button class="spell-button" type="submit">Choose</button>
-      </form>
-    </div>
-    <div class="task-window hidden">
-      <form class="submit-answer" method="get">
-        <label for="answer-field" class="task"></label>
-        <input type="text" class="answer" id="answer-field" autocomplete="off">
-        <button class="submit-button" type="submit">Answer</button>
+        <label for="spell-field3" class="modal-button">Heal</label>
+        <button class="spell-button modal-button" type="submit">Choose</button>
       </form>
     </div>
     <a href="index.html" class="about-page">About</a>

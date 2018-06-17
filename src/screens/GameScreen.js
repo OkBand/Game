@@ -1,12 +1,15 @@
 import lib from "../../lib/index.js";
 const { Container, CanvasRenderer, Text, Sprite, TileSprite, Texture, Task, MathTask } = lib;
 
+import Spell from "../entities/Spell.js";
+
 const textures = {
   background: new Texture("res/img/bg.jpg"),
   player: new Texture("res/img/player_stand.png"),
   monster: new Texture("res/img/monster_parts.png"),
   playerDefeated: new Texture("res/img/player_hurt.png"),
   monsterDefeated: new Texture("res/img/zombie_hurt.png"),
+  //fire: new Texture ("res/img/spells/fire.png")
 };
 
 
@@ -77,6 +80,21 @@ function nameTheMonster(str) {
   };
 }
 
+function clearText() {
+  setTimeout(function(){
+    message.text = "";
+    modal.classList.remove("hidden");
+  }, 1000);
+}
+
+//const fire = new TileSprite(fire, 128, 128);
+
+function animateSpell() {
+
+};
+
+
+
 
 // Add the health game object
 const health = new Text("Health:",
@@ -109,12 +127,18 @@ choose.addEventListener("submit", function() {
 submit.addEventListener("submit", function() {
   event.preventDefault();
   localStorage.setItem("answer", answerField.value);
+  taskWindow.classList.add("hidden");
+  animateSpell();
   let answer = localStorage.getItem("answer");
   if (answer == newTask.answer) {
     monsterHealthAmount -=  20;
+    message.text = "Right!";
+    clearText();
   }
   else {
     healthAmount -=  20;
+    message.text = "Wrong!";
+    clearText();
   }
   localStorage.removeItem("answer");
   answerField.value = "";
@@ -122,8 +146,6 @@ submit.addEventListener("submit", function() {
     mathTask = new MathTask();
     newTask = new Task(mathTask.text, mathTask.result);
     taskTextField.innerHTML = newTask.text;
-    taskWindow.classList.add("hidden");
-    modal.classList.remove("hidden");
   }
 });
 
@@ -224,7 +246,6 @@ class GameScreen extends Container {
     this.add(monster.body);
     this.add(monster.arm2);
 
-
     this.add(monster.head);
     this.add(monster.weapon);
     this.add(monster.hand2);
@@ -234,13 +255,13 @@ class GameScreen extends Container {
     this.add(health);
     this.add(monsterHealth);
     this.add(message);
-
-
   }
 
   update(dt, t) {
     health.text = "Health: " + healthAmount;
     monsterHealth.text = "Health: " + monsterHealthAmount;
+
+
 
     //Check for win
     if (monsterHealthAmount < 1) {
