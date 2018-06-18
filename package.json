@@ -9,9 +9,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "budo src/main.js:build.js --live -- -t [ babelify --presets [ env ] ]",
-    "build": "browserify src/main.js -o bundle.js -t [ babelify --presets [ env ] ]",
-    "publish": "npm run build && gh-pages -t -d Game -b gh-pages"
+    "start": "webpack --mode=development",
+    "build": "webpack --mode=production",
+    "publish": "npm run build && gh-pages -t -d dist -b gh-pages"
   },
   "repository": {
     "type": "git",
@@ -30,5 +30,11 @@
     "browserify": "^15.2.0",
     "budo": "^11.2.2",
     "gh-pages": "^1.2.0"
+  },
+  "dependencies": {
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4"
   }
 }
