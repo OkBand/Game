@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "budo src/main.js:build.js --live -- -t [ babelify --presets [ env ] ]",
     "build": "browserify src/main.js -o bundle.js -t [ babelify --presets [ env ] ]",
-    "publish": "npm run build && gh-pages -t -d dist -b gh-pages"
+    "publish": "npm run build && gh-pages -t -d Game -b gh-pages"
   },
   "repository": {
     "type": "git",
