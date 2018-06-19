@@ -431,5 +431,5 @@ function doNextRound() {
 
   setTimeout(function(){
     window.location.reload(false);
-  }, 4000);
+  }, 2500);
 }
